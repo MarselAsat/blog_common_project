@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: blog-project
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_SERVER:localhost}:5442/postgres
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        show_sql: true
+    hibernate:
+      ddl-auto: none
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://${KEYCLOAK_SERVER:localhost}:8900/realms/myrealm/protocol/openid-connect/certs
+  data:
+    redis:
+#      url: redis://:8wfef78EWFhcw223223lsshWEwhwr2@${REDIS_SERVER:localhost}:6379
+      host: ${REDIS_SERVER:localhost}
+      database: 0
+      port: 6379
+      password: 8wfef78EWFhcw223223lsshWEwhwr2
+
+
+
+server:
+  port: 0
+  error:
+    include-stacktrace: never
+
+user-service:
+  endpoint: http://localhost:9000/user
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+    instanceId: ${spring.application.name}:${random.int}
+  client:
+    serviceUrl:
+      defaultZone: http://${EUREKA_SERVER:localhost}:9999/eureka/
+    healthcheck:
+      enabled: true
+    lease:
+      duration: 5
